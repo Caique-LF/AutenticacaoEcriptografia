@@ -3,9 +3,6 @@ const bcrypt = require('bcrypt')
 const jwt = require('jsonwebtoken')
 const senhaJwt = require('../senhaJwt')
 
-const listarUsuario = async (req, res)=>{
-
-};
 
 const cadastrarUsuario = async (req, res)=>{
     const {nome, email, senha} = req.body
@@ -49,11 +46,15 @@ const loginUsuario = async (req, res)=>{
         return res.status(500).json({mensagem : error.message})
     }
 
+};
+
+const obterPerfil = async (req, res) => {
+	return res.json(req.usuario)
 }
 
 module.exports = {
-    listarUsuario,
     cadastrarUsuario,
-    loginUsuario
+    loginUsuario,
+    obterPerfil
 };
 
