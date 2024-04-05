@@ -22,8 +22,33 @@ const cadastrarUsuario = async (req, res)=>{
     }
 };
 
+const loginUsuario = async (req, res)=>{
+    const {email, senha} = req.body
+
+    try {
+        const usuario = await pool.query('select * from usuarios where email = $1',[email])
+
+        if(usuario.rowCount < 1){
+            return res.status(404).json({mensagem : "Email ou senha invalida"})
+        };
+
+        const senhaValida = await bcrypt.compare(senha, usuario.rows[0].senha)
+
+        if(!senhaValida){
+            return res.status(404).json({mensagem : "Email ou senha invalida"})
+        };
+
+        return res.status(200).json("usuario autenticado")
+
+    } catch (error) {
+        return res.status(500).json({mensagem : error.message})
+    }
+
+}
+
 module.exports = {
     listarUsuario,
-    cadastrarUsuario
+    cadastrarUsuario,
+    loginUsuario
 };
 
