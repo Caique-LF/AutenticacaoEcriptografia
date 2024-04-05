@@ -1,6 +1,7 @@
 const pool = require('../conexao/conexoes');
 
 const listarCarros = async (req, res)=>{
+
     try {
         const {rows} = await pool.query('select * from carros')
 
