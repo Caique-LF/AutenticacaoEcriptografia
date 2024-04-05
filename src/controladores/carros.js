@@ -44,9 +44,33 @@ const cadastrarCarros = async (req, res)=>{
 };
 
 
+const atualizarCarro = async (req, res)=>{
+    const{id} = req.params
+    const {modelo, marca, ano, cor, descricao} = req.body
+
+    try {
+        const{rows, rowCount} = await pool.query('select * from carros where id = $1',
+        [id])
+        
+        if(rowCount < 1){
+            return res.status(200).json({mensagem: "Carro não encontrado"})
+        };
+
+        await pool.query(
+            `update carros set modelo = $1, marca = $2, ano = $3, cor = $4, descricao = $5`,
+            [modelo, marca, ano, cor, descricao])
+        
+       return res.status(204).send()     
+
+    } catch (error) {
+        return res.status(500).json({menssagem: "Erro interno no servidor"})
+    }
+};
+
 
 module.exports = {
     listarCarros,
     detalharCarro,
-    cadastrarCarros
+    cadastrarCarros,
+    atualizarCarro
 }
