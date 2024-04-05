@@ -57,8 +57,8 @@ const atualizarCarro = async (req, res)=>{
         };
 
         await pool.query(
-            `update carros set modelo = $1, marca = $2, ano = $3, cor = $4, descricao = $5`,
-            [modelo, marca, ano, cor, descricao])
+            `update carros set modelo = $1, marca = $2, ano = $3, cor = $4, descricao = $5 where id = $6`,
+            [modelo, marca, ano, cor, descricao, id])
         
        return res.status(204).send()     
 
