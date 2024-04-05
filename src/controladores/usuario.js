@@ -1,5 +1,7 @@
 const pool = require("../conexao/conexoes");
 const bcrypt = require('bcrypt')
+const jwt = require('jsonwebtoken')
+const senhaJwt = require('../senhaJwt')
 
 const listarUsuario = async (req, res)=>{
 
@@ -38,7 +40,10 @@ const loginUsuario = async (req, res)=>{
             return res.status(404).json({mensagem : "Email ou senha invalida"})
         };
 
-        return res.status(200).json("usuario autenticado")
+        const token = jwt.sign({id: usuario.rows[0].id}, senhaJwt, {expiresIn: '8h'})
+        const {senha: _, ...usuarioLogado} = usuario.rows[0]
+
+        return res.status(200).json({ usuario: usuarioLogado, token})
 
     } catch (error) {
         return res.status(500).json({mensagem : error.message})
